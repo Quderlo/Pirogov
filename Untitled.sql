@@ -1,5 +1,5 @@
 CREATE TABLE "order" (
-  "id" order_id PRIMARY KEY,
+  "id" integer PRIMARY KEY,
   "description" varchar,
   "total_cost" integer,
   "created_at" timestamp,
