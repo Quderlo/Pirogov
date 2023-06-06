@@ -1,56 +1,52 @@
-CREATE TABLE "order" (
-  "id" integer PRIMARY KEY,
+create Table "order" (
+  "id" serial primary key,
   "description" varchar,
-  "total_cost" integer,
+  "total_cost" int,
   "created_at" timestamp,
-  "client_id" integer,
-  "worker_id" integer
+  "client_id" int,
+  "worker_id" int
 );
 
-CREATE TABLE "progress" (
-  "id" integer PRIMARY KEY,
+create Table "progress" (
+  "id" serial primary key,
   "status" varchar,
   "notes" varchar,
-  "id_order" integer
+  "id_order" int references "order" ("id")
 );
 
-CREATE TABLE "client" (
-  "id" integer PRIMARY KEY,
+create Table "client" (
+  "id" serial primary key,
   "first_name" varchar,
   "second_name" varchar,
   "adress" varchar,
-  "telephone" integer,
+  "telephone" int,
   "created_at" timestamp
 );
 
-CREATE TABLE "client_tech" (
-  "id" integer PRIMARY KEY,
+create Table "client_tech" (
+  "id" serial primary key,
   "serial_number" varchar,
   "name" varchar,
-  "count" integer,
-  "id_client" integer
+  "count" int,
+  "id_client" int references "client" ("id")
 );
 
-CREATE TABLE "malfunction_type" (
-  "id" integer PRIMARY KEY,
+create Table "malfunction_type" (
+  "id" serial primary key,
   "name" varchar,
   "description" varchar,
-  "id_progress" integer
+  "id_progress" int references "progress" ("id")
 );
 
-CREATE TABLE "worker" (
-  "id" integer PRIMARY KEY,
+create Table "worker" (
+  "id" serial primary key,
   "first_name" varchar,
   "second_name" varchar,
-  "telephone" integer
+  "telephone" int
 );
 
-ALTER TABLE "order" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("id");
-
-ALTER TABLE "progress" ADD FOREIGN KEY ("id_order") REFERENCES "order" ("id");
-
-ALTER TABLE "order" ADD FOREIGN KEY ("worker_id") REFERENCES "worker" ("id");
-
-ALTER TABLE "malfunction_type" ADD FOREIGN KEY ("id_progress") REFERENCES "progress" ("id");
-
-ALTER TABLE "client_tech" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id");
+alter table "order" add constraint "order_client_id_fkey" foreign key ("client_id") references "client" ("id");
+alter table "order" add constraint "order_worker_id_fkey" foreign key ("worker_id") references "worker" ("id");
+alter table "progress" add constraint "progress_order_id_fkey" foreign key ("id_order") references "order" ("id");
+alter table "malfunction_type" add constraint "malfunction_type_progress_id_fkey" foreign key ("id_progress") references "progress" ("id");
+alter table "client_tech" add constraint "client_tech_client_id_fkey" foreign key ("id_client") references "client" ("id");
